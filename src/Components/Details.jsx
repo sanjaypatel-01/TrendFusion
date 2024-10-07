@@ -1,23 +1,48 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { ProductContext } from "../utils/context";
+import axios from "../utils/axios";
+import Loading from "./Loading";
+// import axios from "axios";
 
 function Details() {
-  return (
+
+  // const [products] = useContext(ProductContext);
+
+  const [product, setProducts] = useState(null)
+  const { id } = useParams()
+  const getsingleproduct = async () => {
+    try {
+      // const id = parseInt(this.props.match.params.id);
+      const { data } = await axios(`/products/${id}`);
+      setProducts(data);
+      // console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  // calling getSingleProduct using useEffect
+
+  useEffect(() => {
+    getsingleproduct();
+  }, [])
+
+  return ( product ?
     <div className="w-[70%] h-full justify-between items-center flex m-auto p-[10%]">
       <img
         className="object-contain h-[80%] w-[50%]"
-        src="https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg"
+        src={`${product.image}`}
         alt=""
       />
       <div className="content flex flex-col w-[40%] gap-3">
         <h1 className="text-3xl">
-          Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops
+          {product.title}
         </h1>
-        <h3 className="text-zinc-500">men's clothing</h3>
-        <h2 className="text-red-300">Price: ₹ 109.95</h2>
+        <h3 className="text-zinc-500">{product.category}</h3>
+        <h2 className="text-red-300">Price: {product.price}</h2>
         <p className="">
-          Your perfect pack for everyday use and walks in the forest. Stash your
-          laptop (up to 15 inches) in the padded sleeve, your everyday
+          {product.description}
         </p>
         <div className="mt-4">
           <Link className="py-3 px-5 border rounded border-blue-200 text-blue-300 mr-5">
@@ -28,7 +53,7 @@ function Details() {
           </Link>
         </div>
       </div>
-    </div>
+    </div> : <Loading/>
   );
 }
 
