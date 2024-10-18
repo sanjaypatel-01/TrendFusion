@@ -1,14 +1,46 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { ProductContext } from "../utils/context";
 
 function Create() {
+  const [products, setProducts] = useContext(ProductContext);
+
   const [image, setImage] = useState("");
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
 
+  const AddProductHandler = (e) => {
+    e.preventDefault();
+
+    if (
+      title.trim().length < 5 ||
+      image.trim().length < 5 ||
+      category.trim().length < 5 ||
+      description.trim().length < 5 ||
+      price.trim().length < 1
+    ) {
+      alert("No field must be emplty, every field must have 4 characters");
+      return;
+    }
+
+    const product = {
+      title,
+      image,
+      category,
+      price,
+      description,
+    };
+    setProducts([...products, product]);
+    console.log(product);
+    // toast.success("New Product Added Successfully")
+  };
+
   return (
-    <form className="flex flex-col items-center p-[5%] w-screen h-screen">
+    <form
+      onSubmit={AddProductHandler}
+      className="flex flex-col items-center p-[5%] w-screen h-screen"
+    >
       <h1 className="mb-5 w-1/2 text-2xl font-semibold">Add New Product</h1>
       <input
         type="url"

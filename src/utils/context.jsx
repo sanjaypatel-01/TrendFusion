@@ -16,6 +16,8 @@ const Context = (props) => {
         }
     }
 
+    console.log(products) // product added 20 -> 21 -> 22 -> 23..
+
     useEffect(() => {
         getProducts()
     }, [])
