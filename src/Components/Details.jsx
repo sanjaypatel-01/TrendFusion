@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ProductContext } from "../utils/context";
 import axios from "../utils/axios";
@@ -7,25 +7,31 @@ import Loading from "./Loading";
 
 function Details() {
 
+  const [products, setProducts] = useContext(ProductContext);
+
   // const [products] = useContext(ProductContext);
 
-  const [product, setProducts] = useState(null)
+  const [product, setProduct] = useState(null)
   const { id } = useParams()
-  const getsingleproduct = async () => {
-    try {
-      // const id = parseInt(this.props.match.params.id);
-      const { data } = await axios(`/products/${id}`);
-      setProducts(data);
-      // console.log(data);
-    } catch (error) {
-      console.error(error);
-    }
-  }
 
-  // calling getSingleProduct using useEffect
+  // const getsingleproduct = async () => {
+  //   try {
+  //     // const id = parseInt(this.props.match.params.id);
+  //     const { data } = await axios(`/products/${id}`);
+  //     setProduct(data);
+  //     // console.log(data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
+
+  // // calling getSingleProduct using useEffect
 
   useEffect(() => {
-    getsingleproduct();
+    if(!product){
+      setProduct(products.filter((p) => p.id == id)[0])
+    }
+    // getsingleproduct();
   }, [])
 
   return ( product ?
